@@ -109,14 +109,18 @@ function checkAuth() {
 
 function createCardRestaraunts(restaurant) {
   const { image, kitchen, name, price, products, stars, time_of_delivery:timeOfDelivery } = restaurant;
-  const card = `
-  <a class="card card-restaurant" data-products="${products}"
-  data-info="${[name, price, stars, kitchen]}"
-  >
+  const card = document.createElement('a');
+  card.classList.add('card') // добавляет класс
+  card.classList.add('card-restaurant')
+  // card.className = "card card-restaurant"; добавляет класс по другому
+  card.products = products;
+  card.info = [name, price, stars, kitchen];
+
+  card.insertAdjacentHTML('beforeend', `
     <img
-      src="${image}"
-      alt="image"
-      class="card-image"
+    src="${image}"
+    alt="image"
+    class="card-image"
     />
     <div class="card-text">
       <div class="card-heading">
@@ -131,10 +135,9 @@ function createCardRestaraunts(restaurant) {
         <div class="category">${kitchen}</div>
       </div>
     </div>
-  </a>
-  `;
+  `);
 
-  cardsRestaraunts.insertAdjacentHTML("beforeend", card);
+  cardsRestaraunts.insertAdjacentElement("beforeend", card);
 }
 
 function createCardGood(goods) {
@@ -178,26 +181,27 @@ cardsMenu.insertAdjacentElement("beforeend", card);
 function openGoods(event) {
   const target = event.target;
   const restaraunt = target.closest(".card-restaurant");
+  
   if (login) {
     
     if (restaraunt) {
       
       // const info = restaraunt.dataset.info.split (',')
       // const [ name, price , stars, kitchen ] = info;
-      // const [ name, price , stars, kitchen ] = restaraunt.info;
+      const [ name, price , stars, kitchen ] = restaraunt.info;
 
       containerPromo.classList.add("hide");
       restaurants.classList.add("hide");
       menu.classList.remove("hide");
       cardsMenu.textContent = "";
         
-      console.log(restaraunt.dataset.info);
-      // restaurantTitle.textContent = name;
-      // rating.textContent = stars;
-      // minPrice.textContent = 'От ' + price + ' ₽';
-      // category.textContent = kitchen;
+      // console.log(restaraunt.dataset.info);
+      restaurantTitle.textContent = name;
+      rating.textContent = stars;
+      minPrice.textContent = 'От ' + price + ' ₽';
+      category.textContent = kitchen;
 
-      getData(`./db/${restaraunt.dataset.products}`).then(function(data){
+      getData(`./db/${restaraunt.products}`).then(function(data){
         data.forEach(createCardGood)
       });
     }
