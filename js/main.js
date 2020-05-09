@@ -23,7 +23,7 @@ const category = document.querySelector(".category");
 const modalBody = document.querySelector(".modal-body");
 const modalPricetag = document.querySelector(".modal-pricetag");
 const buttonClearCart = document.querySelector(".clear-cart");
-
+//haha
 const cart = [];
 
 let login = localStorage.getItem("Delivery");
